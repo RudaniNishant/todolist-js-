@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .store{
+            margin: 0px 100px 0px 100px;
+
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Contact us</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 "  type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+      <div class="container">
+          <h1 class="text-center my-4" > Todos List</h1>
+          
+            <div class="form-group">
+              <label for="exampleInputEmail1">Todos</label>
+              <input type="text" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter your work">
+              <small id="emailHelp" class="form-text text-muted">Please enter What you do today!</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1" >Discription</label>
+                <textarea class="form-control" id="discription"rows="3"></textarea>
+              </div>
+            <button type="submit" class="btn btn-primary btn-sm" id="add">Add Item </button>
+            <button  id="clear" class="btn btn-primary" onclick="clearStorage()">Clear list</button>
+          
+ 
+      </div>
+      <h2 class="text-center my-4">Here Your Todos</h2>
+      <div class="store" id="item">
+        <table class=" center table my-4 table-sm table-hover" id="todo">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">SNo</th>
+                <th scope="col">Item Title</th>
+                <th scope="col">Item Diascription</th>
+                <th scope="col">Action</th>
+
+                
+              </tr>
+            </thead>
+            <tbody id="tb">
+              <tr>
+                <th scope="row">1</th>
+                <td>jenish</td>
+                <td>chovatiya</td>
+                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
+                
+              </tr>
+              
+              
+            </tbody>
+          </table>
+          
+      </div>
+      <script>
+        function getAndUpdate(){
+
+          console.log("Updating list...");
+              tit = document.getElementById("title").value;
+              desc = document.getElementById("discription").value;
+              if (localStorage.getItem("itemJson") == null){
+                  itemJsonArray = [];
+                  itemJsonArray.push([tit,desc]);
+                  localStorage.setItem("itemJson", JSON.stringify(itemJsonArray))
+              }
+              else{
+                itemJsonArraystr = localStorage.getItem("itemJson")
+                itemJsonArray = JSON.parse(itemJsonArraystr);
+                itemJsonArray.push([tit,desc]);
+                localStorage.setItem("itemJson", JSON.stringify(itemJsonArray))
+              }
+              update();
+        }
+
+        
+        function update(){
+
+         
+              if (localStorage.getItem("itemJson") == null){
+                  itemJsonArray = [];
+
+                  localStorage.setItem("itemJson", JSON.stringify(itemJsonArray))
+              }
+              else{
+                itemJsonArraystr = localStorage.getItem("itemJson")
+                itemJsonArray = JSON.parse(itemJsonArraystr);
+
+                localStorage.setItem("itemJson", JSON.stringify(itemJsonArray))
+              }
+              let tb = document.getElementById("tb");
+              let str = "";
+              itemJsonArray.forEach((element,index) => {
+                str += 
+                `
+                <tr>
+                <th scope="row">${index +1 }</th>
+                <td>${element[0]}</td>
+                <td>${element[1]}</td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick = "deleted(${index})">Delete</button></td>
+                </tr>
+
+                `
+                
+              });
+              tb.innerHTML = str;
+
+
+        }
+          add = document.getElementById("add");
+          add.addEventListener("click", getAndUpdate);
+          update();
+          function deleted(itemIndex){
+            console.log("delete", itemIndex);
+            itemJsonArraystr=localStorage.getItem("itemJson");
+            itemJsonArray.splice(itemIndex,1);
+            localStorage.setItem("itemJson", JSON.stringify(itemJsonArray))
+
+            update();
+          }
+          function clearStorage(){
+                if (confirm("Do you areally want to clear?")){
+                console.log('Clearing the storage')
+                localStorage.clear();
+                update()
+                }
+            }
+              
+
+
+          
+
+      </script>
+</body>
+</html>
